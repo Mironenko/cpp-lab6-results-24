@@ -1,0 +1,160 @@
+#include "stdafx.h"
+#include <locale.h>
+#include <iostream>
+using namespace std;
+template<typename T>
+class Matritza
+{
+public:
+	int N, M;
+	T **val;
+
+	Matritza(int n, int m)
+	{
+		N = n;
+		M = m;
+		val = new T*[n];
+		for (int i = 0; i < n; i++)
+			val[i] = new T[m];
+		for (int i = 0; i < N; i++)
+			for (int j = 0; j < M; j++)
+				val[i][j] = 0;
+	}
+	void setMatritza()
+	{
+		int i, j;
+		T tmp;
+		for (i = 0; i < N; i++)
+			for (j = 0; j < M; j++)
+			{
+				cin >> tmp;
+				val[i][j] = tmp;
+			}
+	}
+	Matritza Matritza::operator+(Matritza b)
+	{
+		if (N != b.N || M != b.M)
+			return b;
+		Matritza ret(N, M);
+		for (int i = 0; i < N; i++)
+			for (int j = 0; j < M; j++)
+			{
+				T n = val[i][j] + b.val[i][j];
+				ret.val[i][j] = n;
+			}
+		return ret;
+	}
+	Matritza Matritza::operator*(int num)
+	{
+		Matritza ret(N, M);
+		for (int i = 0; i < N; i++)
+			for (int j = 0; j < M; j++)
+				ret.val[i][j] = val[i][j] * num;
+		return ret;
+	}
+	Matritza transpon()
+	{
+		Matritza ret(M, N);
+		for (int i = 0; i < N; i++)
+			for (int j = 0; j < M; j++)
+				ret.val[i][j] = val[j][i];
+		return ret;
+	}
+	Matritza Matritza::operator*(Matritza b)
+	{
+		if (this->M != b.N)
+			return b;
+		Matritza ret(N, b.M);
+		for (int i = 0; i < N; i++)
+			for (int j = 0; j < M; j++)
+				for (int k = 0; k < b.N; k++)
+					ret.val[i][j] += val[i][k] * b.val[k][j];
+		return ret;
+	}
+	void printMatritza()
+	{
+		for (int i = 0; i < N; cout << endl, i++)
+			for (int j = 0; j < M; j++)
+				cout << val[i][j] << "\t";
+	}
+
+
+	operator T()const
+	{
+
+
+return val[i][j];
+	
+	}
+T& operator()(int i, int j)
+{
+	
+	
+	return val[i][j];
+}
+
+
+};
+
+
+int main()
+{
+	setlocale(LC_ALL, "Russian");
+	int raz1, raz2;
+	/*bool flag = false;
+	Matritza* C = new Matritza(0, 0);
+	cout << "Aaaaeoa ?acia?u iao?eou:" << endl;
+	cin >> raz1;
+	cin >> raz2;
+	Matritza A(raz1, raz2);
+	cout << "Aaaaeoa ?acia?u iao?eou:" << endl;
+	cin >> raz1;
+	cin >> raz2;
+	Matritza B(raz1, raz2);
+	cout << "Caaaeoa iao?eoo A" << endl;
+	A.setMatritza();
+	cout << "Caaaeoa iao?eoo B" << endl;
+	B.setMatritza();
+
+	if (A.N == B.N && A.M == B.M)
+	{
+		C = new Matritza(A.N, B.M);
+		C = &(A + B);
+		cout << "Coiia\n";
+		C->printMatritza();
+		flag = true;
+	}
+	else
+	{
+		cout << "Iaeucy i?innoie?iaaou aaa iao?eou!";
+	}
+
+	if (A.M == B.N)
+	{
+		C = new Matritza(A.N, B.M);
+		C = &(A*B);
+		cout << "I?iecaaaaiea\n";
+		C->printMatritza();
+		flag = true;
+	}
+	else
+	{
+		cout << "Iaeucy ia?aiii?eou aaa iao?eou!";
+	}
+
+	if (flag == true)
+	{
+		C = &(C->transpon());
+		cout << "Transpon\n";
+		C->printMatritza();
+
+		C = &((*C) * 10);
+		cout << "Umn na 4islo\n";
+		C->printMatritza();
+	}
+	*/
+	fflush(stdin);
+	getchar();
+	return 0;
+}
+
