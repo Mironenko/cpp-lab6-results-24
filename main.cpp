@@ -18,7 +18,7 @@ int main()
 		int m, n;
 
 		ist >> m >> n;
-		QMatrix<Q, 2, 2> a(m,n);
+		auto a = QMatrix<Q,2,2>();
 		ist >> a;
 
 		ist >> m >> n;

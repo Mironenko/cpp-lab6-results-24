@@ -12,7 +12,7 @@ private:
 	unsigned int rows, columns;
 
 public:
-	QMatrix(unsigned int m = 1, unsigned int n = 1);
+	QMatrix(unsigned int m = R, unsigned int n = C);
 	~QMatrix();
 	QMatrix(QMatrix<T, R, C>&& oth);
 
