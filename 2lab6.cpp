@@ -21,6 +21,10 @@ public:
 		e = new T[n*m];
 	}
 
+	matr(size_t a) : n(a), m(1) {
+		e = new T[n*m];
+	};
+
 	~matr() {
 		delete[] e;
 	}
@@ -28,12 +32,13 @@ public:
 	matr(const matr& ma) {
 		n = ma.n;
 		m = ma.m;
-		e = new T[n*m];;
+		e = new T[n*m];
 		copy(ma.e, ma.e + n*m, e);
 	}
 
 	void set(T a, size_t b) {
-		e[b] = a;
+		if (b < n*m) e[b] = a;
+		else cout << "ERROR: out of size!" << endl;
 	}
 
 	const T& operator() (size_t a, size_t b) {
@@ -76,6 +81,15 @@ public:
 		return ma;
 	}
 
+	size_t size() {
+		return n*m;
+	}
+
+	T& get(size_t i) {
+		if (i < n*m) return e[i];
+		else cout << "ERROR: out of size!" << endl;
+	}
+
 	class fwdit {
 		matr* ma;
 		size_t c;
@@ -102,6 +116,10 @@ public:
 		bool operator ==(const fwdit& it) {
 			return (c == it.c);
 		}
+
+		size_t getc() {
+			return c;
+		}
 	};
 
 	fwdit begin() {
@@ -112,19 +130,19 @@ public:
 		return fwdit(this, n*m);
 	}
 
+	//TODO for each
+
 	template<typename T1>
 	friend ostream& operator<< (ostream& os, const matr<T1>& m);
 
 	template<typename T1>
 	friend istream& operator>> (istream& is, matr<T1> & m);
-
-	//template<typename T1, typename T2>
 };
 
 template<typename T>
 ostream& operator<< (ostream& os, const matr<T> & m) {
 	for (int i = 0; i < m.n; i++) {
-		for (int j = 0; j < m.m; j++) os << m.e[i*n + j];
+		for (int j = 0; j < m.m; j++) os << m.e[i*m.m + j] << "\t";
 		os << endl;
 	}
 	os << endl;
@@ -134,40 +152,56 @@ ostream& operator<< (ostream& os, const matr<T> & m) {
 template<typename T>
 istream& operator>> (istream& is, matr<T> & m) {
 	for (int i = 0; i < m.n; i++) {
-		for (int j = 0; j < m.m; j++) is >> m.e[i*n + j];
+		for (int j = 0; j < m.m; j++) is >> m.e[i*m.n + j];
 	}
 	return is;
 };
 
-template<template <class> class cont, typename T, typename U>
-cont<U> caster(cont<T> a) {
-	cont<U> b(m.n, m.m);
-	for (int i = 0; i < n*m; i++) b.e[i] = static_cast<U>(a.e[i]);
+template<template <class> class cont, typename T>
+cont<double> numtod(cont<T>& a) {
+	cont<double> b(a.size());
+	for (size_t i = 0; i != a.size(); ++i) 
+		b.get(i) = a.get(i);
 	return b;
 }
-//
-//template<typename cont>
-//void for_each(const cont& c, void(*doSmth)(const typename Cont::value_type&))
-//{
-//	for (auto it = cont.begin(); it != cont.end(); ++it)
-//		doSmth(*it)
-//}
 
+template<template <class> class cont, typename T>
+cont<string> numtostr(cont<T>& a) {
+	cont<string> b(a.size());
+	for (size_t i = 0; i != a.size(); ++i)
+	{
+		b.get(i) = to_string(a.get(i));
+		b.get(i) += " is a perfect number, isnt it?";
+	}
+	return b;
+};
+
+class bit11 {
+	uint16_t a : 11;
+}; // this is not that you mean, isnt it?
+
+template<typename cont>
+void for_each(const cont& c, void (*doSmth)(const typename cont::value_type))
+{
+	for (auto it = cont.begin(); it != cont.end(); ++it)
+		doSmth(*it);
+};
 
 int main()
 {
 	int se, n, m, a;
-	//cout << "Enter the number of elements: ";
-	matr<int> g(3, 4);
-	for (int i = 0; i < 12; i++) g.set(i, i);
-	matr<int>* h = &g;
-	matr<int>::fwdit f(h, 0);
-	matr<float> n = caster(g);
+	matr<int> g(3, 7);
+	for (int i = 0; i < 21; i++) g.set(i, i);
+	matr<double> gd = numtod(g);
+	cout << "After make it double:\n" << gd;
+	matr<string> gs = numtostr(g);
+	cout << "After make it string:\n" << gs;
 
 	for (matr<int>::fwdit it = g.begin(); it != g.end(); ++it) {
 		cout << *it << endl;
 	}
 
+	cout << g << endl;
 
 	system("pause");
 	return 0;
