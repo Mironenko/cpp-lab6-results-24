@@ -7,6 +7,8 @@
 #include <fstream>
 #include <memory>
 #include <vector>
+#include <algorithm>
+#include <functional>
 
 using namespace std;
 
@@ -90,7 +92,7 @@ public:
 		else cout << "ERROR: out of size!" << endl;
 	}
 
-	class fwdit {
+	class fwdit : public std::iterator<std::input_iterator_tag, T>{
 		matr* ma;
 		size_t c;
 	public:
@@ -157,51 +159,69 @@ istream& operator>> (istream& is, matr<T> & m) {
 	return is;
 };
 
-template<template <class> class cont, typename T>
-cont<double> numtod(cont<T>& a) {
-	cont<double> b(a.size());
+
+template<template <typename> class cont, typename T, typename U> // good caster for ANY types
+cont<U> caster(cont<T> a) {
+	cont<U> b(a.size());
 	for (size_t i = 0; i != a.size(); ++i) 
-		b.get(i) = a.get(i);
+		b.get(i) = static_cast<U>(a.get(i));
 	return b;
 }
 
-template<template <class> class cont, typename T>
-cont<string> numtostr(cont<T>& a) {
-	cont<string> b(a.size());
-	for (size_t i = 0; i != a.size(); ++i)
-	{
-		b.get(i) = to_string(a.get(i));
-		b.get(i) += " is a perfect number, isnt it?";
-	}
-	return b;
-};
-
 class bit11 {
 	uint16_t a : 11;
-}; // this is not that you mean, isnt it?
+}; // this is not that you mean by 11-bit numbers, isnt it?
 
-template<typename cont>
-void for_each(const cont& c, void (*doSmth)(const typename cont::value_type))
-{
-	for (auto it = cont.begin(); it != cont.end(); ++it)
-		doSmth(*it);
-};
+
+template<typename T>
+void plusel(T& el, double a) {
+		el += a;
+}
+
+template<typename T>
+void plusnum(T& el, size_t& n) {
+	el += n;
+	n++;
+}
+
+template<typename T>
+bool eq1(T el, T k, T b) {
+	return (el == -b / k);
+}
+
+template<typename T>
+bool lesst(T a, T b) {
+	return (a < b);
+}
+
+template<typename T>
+bool eq2(T el, T a, T b, T c) {
+	return (a*el*el + b*el + c == 0);
+}
 
 int main()
 {
-	int se, n, m, a;
 	matr<int> g(3, 7);
 	for (int i = 0; i < 21; i++) g.set(i, i);
-	matr<double> gd = numtod(g);
-	cout << "After make it double:\n" << gd;
-	matr<string> gs = numtostr(g);
-	cout << "After make it string:\n" << gs;
+
+	matr<double> gd = caster<matr, int, double>(g);
+
+	cout << "Matr: " << g << endl << "After make it double:\n" << gd << endl;
 
 	for (matr<int>::fwdit it = g.begin(); it != g.end(); ++it) {
 		cout << *it << endl;
 	}
 
-	cout << g << endl;
+	int pel = 3, cel = 14, k = -3, b1 = 12, a = 1, b = -2, c = 1, lel = 12, fel = 77;
+	for_each(g.begin(), g.end(), bind(plusel<int>, placeholders::_1, pel));
+	cout << g;
+	for_each(g.begin(), g.end(), bind(plusnum<int>, placeholders::_1, size_t(1)));
+	cout << g;
+	cout << "Number of elements equal to " << cel << ": " << count(g.begin(), g.end(), cel) << endl;
+	cout << "Nmber of solutions of " << k << "x+" << b1 << "=0: " << count_if(g.begin(), g.end(), bind(eq1<double>, placeholders::_1, k, b1)) << endl;
+	cout << "Number of elements less than " << lel <<": " << count_if(g.begin(), g.end(), bind(lesst<double>, placeholders::_1, cel)) << endl;
+	cout << "First solution of " << a << "x^2+" << b << "x+" << c << "=0, or memory address if there is no solutions: " << *find_if(g.begin(), g.end(), bind(eq2<double>, placeholders::_1, a, b, c)) << endl;
+	cout << "First element equal to " << fel << ", or memory address if there are no such elements: " << *find(g.begin(), g.end(), fel) << endl;
 
 	system("pause");
 	return 0;
