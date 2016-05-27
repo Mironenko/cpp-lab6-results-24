@@ -22,7 +22,7 @@ public:
 
 	T** element;
 
-	T& const operator()(unsigned int i, unsigned int j) const;
+	const T& operator()(unsigned int i, unsigned int j) const;
 	T& operator()(unsigned int i, unsigned int j);
 
 	QMatrix<T, R, C> transposition() const;
@@ -38,17 +38,17 @@ public:
 	}
 
 
-	template <class T, unsigned R, unsigned C>
+	template <class M, unsigned I, unsigned J>
 	friend istream& operator>>(istream& in, QMatrix<T, R, C>& mat);
 
 
-	template <class T, unsigned R, unsigned C>
+	template <class M, unsigned I, unsigned J>
 	friend ostream& operator<<(ostream& out, const QMatrix<T, R, C>& mat);
 
-	template <class T, unsigned R, unsigned C>
+	template <class M, unsigned I, unsigned J>
 	friend QMatrix<T, R, C> operator* (const QMatrix<T, R, C>& lhs, const QMatrix<T, R, C>& rhs);
 
-	template <class T, unsigned R, unsigned C>
+	template <class M, unsigned I, unsigned J>
 	friend QMatrix<T, R, C> operator+ (const QMatrix<T, R, C>& lhs, const QMatrix<T, R, C>& rhs);
 };
 
@@ -97,10 +97,10 @@ QMatrix<T, R, C> QMatrix<T, R, C>::transposition() const {
 }
 
 
-template <class T, unsigned R, unsigned C>
-QMatrix<T, R, C> operator* (const QMatrix<T, R, C>& lhs, const QMatrix<T, R, C>& rhs) {
+template <class T, unsigned R1, unsigned R2, unsigned C1, unsigned C2>
+QMatrix<T, R1, C2> operator* (const QMatrix<T, R1, C1>& lhs, const QMatrix<T, R2, C2>& rhs) {
 	if (lhs.columns_count() != rhs.rows_count()) throw BadSizeOfMatrix();
-	QMatrix<T, R, C> result = QMatrix(lhs.rows_count(), rhs.columns_count());
+	QMatrix<T, R1, C2> result = QMatrix<T, R1, C2>(lhs.rows_count(), rhs.columns_count());
 
 	for (unsigned int i = 0; i < lhs.rows_count(); i++)
 		for (unsigned int j = 0; j < rhs.columns_count(); j++)
@@ -127,7 +127,7 @@ QMatrix<T, R, C> operator+ (const QMatrix<T, R, C>& lhs, const QMatrix<T, R, C>&
 
 
 template <class T, unsigned R, unsigned C>
-T& const QMatrix<T, R, C>::operator()(unsigned int i, unsigned int j) const { return element[i][j]; }
+const T& QMatrix<T, R, C>::operator()(unsigned int i, unsigned int j) const { return element[i][j]; }
 
 template <class T, unsigned R, unsigned C>
 T& QMatrix<T, R, C>::operator()(unsigned int i, unsigned int j) { return element[i][j]; }

@@ -1,7 +1,5 @@
 #include "al-6.h"
-
 #include <iostream>
-
 
 
 
@@ -31,7 +29,6 @@ int main()
 		ist.close();
 		ost.close();
 
-		system("pause");
 		return 0;
 		
 	}
