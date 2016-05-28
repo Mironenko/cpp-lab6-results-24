@@ -1,5 +1,4 @@
-#include "al-6.h"
-#include <iostream>
+#include "QMatrix.h"
 
 
 
@@ -13,18 +12,15 @@ int main()
 		if (!ist) throw FileNotFound();
 		ofstream ost("out.txt");
 		if (!ost) throw FileNotFound();
-		int m, n;
 
-		ist >> m >> n;
 		auto a = QMatrix<Q,2,2>();
 		ist >> a;
 
-		ist >> m >> n;
-		QMatrix<Q, 2, 2> c(m,n);
-		ist >> c;
+		auto b = QMatrix<Q, 2, 2>();
+		ist >> b;
 
-		QMatrix<Q, 2, 2> b = a + c;
-		cout << b;
+		QMatrix<Q, 2, 2> c = a + b;
+		ost << c;
 
 		ist.close();
 		ost.close();

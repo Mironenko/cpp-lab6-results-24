@@ -20,4 +20,3 @@ public:
 	friend std::istream& operator>>(std::istream& in, Q& q);
 	friend std::ostream& operator<<(std::ostream& out, const Q& q);
 };
-
