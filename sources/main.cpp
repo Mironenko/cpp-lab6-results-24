@@ -26,12 +26,21 @@ int main()
 //
 //		ist.close();
 //		ost.close();
-
-        vector<int> a;
-        a.push_back(3);
-        a.push_back(4);
         
-        auto b = container_cast<list<double>>(a);
+        ifstream ist("in.txt");
+        if (!ist) throw FileNotFound();
+
+        auto a = QMatrix<Q,2,2>();
+        ist >> a;
+
+        auto b = QMatrix<Q, 2, 2>();
+        ist >> b;
+
+        QMatrix<Q, 2, 2> c = a + b;
+        cout << a;
+
+        ist.close();
+
         
 		return 0;
 		

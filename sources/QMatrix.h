@@ -47,12 +47,12 @@ public:
 	friend QMatrix<T, R, C> operator+ (const QMatrix<T, R, C>& lhs, const QMatrix<T, R, C>& rhs);
 
 
-	class Iterator
+	class iterator
 	{
 	public:
-		Iterator(T** _data, unsigned r, unsigned c) : data(_data), i(r), j(c) {}
+		iterator(T** _data, unsigned r, unsigned c) : data(_data), i(r), j(c) {}
 
-		Iterator& operator++() {
+		iterator& operator++() {
 			j++;
 			if (j >= C) {
 				i++;
@@ -61,17 +61,24 @@ public:
 
 			return *this;
 		}
+        
+        
+        friend bool operator!=(const iterator& lhs, const iterator& rhs) {
+            
+            return &(*lhs) != &(*rhs);
+        }
 
-		T** operator*() { return &data[i][j]; }
-		T& operator->() { return data[i][j]; }
 
-        Iterator begin() { return Iterator(data, 0, 0); }
-        Iterator end() { return Iterator(data, R-1, C-1); }
+		T& operator*() const { return data[i][j]; }
+		T& operator->() const { return data[i][j]; }
 
 	private:
         T** data;
 		unsigned i, j;
 	};
+    
+    iterator begin() const { return iterator(element, 0, 0); }
+    iterator end() const { return iterator(element, R, 0); }
 };
 
 
@@ -151,20 +158,19 @@ T& QMatrix<T, R, C>::operator()(unsigned int i, unsigned int j) { return element
 
 template <class T, unsigned R, unsigned C>
 istream& operator>>(istream& ist, QMatrix<T, R, C>& mat) {
-	for (auto i = 0; i < R; i++)
-		for (unsigned int j = 0; j < C; j++) {
-			ist >> mat(i, j);
-		}
-
+    for (auto i = mat.begin(); i != mat.end(); ++i)
+        ist >> *i;
+    
 	return ist;
 }
 
 
 template <class T, unsigned R, unsigned C>
 ostream& operator<<(ostream& ost, const QMatrix<T, R, C>& mat) {
-	for (unsigned int i = 0; i < R; i++) {
-		for (unsigned int j = 0; j < C; j++)
-			ost << mat(i, j) << "\t";
+    for (auto i = 0; i < R; ++i) {
+        for (auto j = 0; j < C; j++) {
+			ost << mat(i,j) << "\t";
+        }
 		ost << endl;
 	}
 
