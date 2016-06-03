@@ -45,6 +45,32 @@ public:
     
 	template <class M, unsigned I, unsigned J>
 	friend QMatrix<T, R, C> operator+ (const QMatrix<T, R, C>& lhs, const QMatrix<T, R, C>& rhs);
+
+
+	class Iterator
+	{
+	public:
+		Iterator(unsigned r, unsigned c) : data(_data), i(r), j(c) {}
+
+		Iterator& operator++() {
+			j++;
+			if (j >= C) {
+				i++;
+				j = 0;
+			}
+
+			return *this;
+		}
+
+		T** operator*() { return &element[i][j]; }
+		T& operator->() { return element[i][j]; }
+
+		Iterator begin() { return Iterator(0, 0) }
+		Iterator end() { return Iterator(R-1, C-1) }
+
+	private:
+		unsigned i, j;
+	};
 };
 
 
