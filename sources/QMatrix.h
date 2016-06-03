@@ -50,7 +50,7 @@ public:
 	class Iterator
 	{
 	public:
-		Iterator(unsigned r, unsigned c) : data(_data), i(r), j(c) {}
+		Iterator(T** _data, unsigned r, unsigned c) : data(_data), i(r), j(c) {}
 
 		Iterator& operator++() {
 			j++;
@@ -62,13 +62,14 @@ public:
 			return *this;
 		}
 
-		T** operator*() { return &element[i][j]; }
-		T& operator->() { return element[i][j]; }
+		T** operator*() { return &data[i][j]; }
+		T& operator->() { return data[i][j]; }
 
-		Iterator begin() { return Iterator(0, 0) }
-		Iterator end() { return Iterator(R-1, C-1) }
+        Iterator begin() { return Iterator(data, 0, 0); }
+        Iterator end() { return Iterator(data, R-1, C-1); }
 
 	private:
+        T** data;
 		unsigned i, j;
 	};
 };
