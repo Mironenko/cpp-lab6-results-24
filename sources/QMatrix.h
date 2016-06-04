@@ -50,6 +50,14 @@ public:
 	class iterator
 	{
 	public:
+        typedef ptrdiff_t difference_type;
+        typedef T value_type;
+        typedef T* pointer;
+        typedef T& reference;
+        typedef unsigned sizet_type;
+        typedef std::forward_iterator_tag iterator_category;
+        
+        
 		iterator(T** _data, unsigned r, unsigned c) : data(_data), i(r), j(c) {}
 
 		iterator& operator++() {
@@ -69,12 +77,12 @@ public:
         }
 
 
-		T& operator*() const { return data[i][j]; }
-		T& operator->() const { return data[i][j]; }
+		reference operator*() const { return data[i][j]; }
+		reference operator->() const { return &(data[i][j]); }
 
 	private:
         T** data;
-		unsigned i, j;
+		sizet_type i, j;
 	};
     
     iterator begin() const { return iterator(element, 0, 0); }

@@ -1,10 +1,22 @@
 #include <vector>
 #include <list>
+#include <algorithm>
 #include "QMatrix.h"
 
 
 
 using namespace std;
+
+
+template <class T>
+void inc(T& num) { num = num + T(1); }
+
+template <class T>
+bool linear(T& num) {
+    T k(1), b(-1);
+    
+    return (k*num + b) == 0;
+}
 
 
 int main()
@@ -27,20 +39,12 @@ int main()
 //		ist.close();
 //		ost.close();
         
-        ifstream ist("in.txt");
-        if (!ist) throw FileNotFound();
+        auto a = QMatrix<int,2,2>();
 
-        auto a = QMatrix<Q,2,2>();
-        ist >> a;
-
-        auto b = QMatrix<Q, 2, 2>();
-        ist >> b;
-
-        QMatrix<Q, 2, 2> c = a + b;
+        for_each(a.begin(), a.end(), inc<int>);
         cout << a;
-
-        ist.close();
-
+        cout << count(a.begin(), a.end(), 1) << endl;
+        cout << count_if(a.begin(), a.end(), linear) << endl;
         
 		return 0;
 		
