@@ -12,7 +12,7 @@ template <class T>
 void inc(T& num) { num = num + T(1); }
 
 template <class T>
-bool linear(T& num) {
+bool linear(const T& num) {
     T k(1), b(-1);
     
     return (k*num + b) == 0;
@@ -43,8 +43,12 @@ int main()
 
         for_each(a.begin(), a.end(), inc<int>);
         cout << a;
+        
         cout << count(a.begin(), a.end(), 1) << endl;
-        cout << count_if(a.begin(), a.end(), linear) << endl;
+        cout << count_if(a.begin(), a.end(), linear<int>) << endl;
+        
+        auto it = find(a.begin(), a.end(), 1);
+        cout << *it << endl;
         
 		return 0;
 		
